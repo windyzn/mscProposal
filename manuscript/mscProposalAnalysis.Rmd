@@ -1,0 +1,140 @@
+---
+title: "MSc Proposal Analysis"
+author: "Windy Wang"
+date: "January 18, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE)
+
+library(dplyr)
+
+ds <- readRDS(file='../data/ds.Rds') %>% 
+  dplyr::mutate(logUdbpRatio = log(udbpCrRatio)) %>% 
+  dplyr::select(SID, VN, fVN, Age, ACR, eGFR, UDBP,
+                acr_status, eGFR_status, UDBP_status, 
+                udbpCrRatio, logUdbpRatio) %>% 
+  dplyr::group_by(SID) %>% 
+  dplyr::filter(n() == 3) %>% 
+  dplyr::ungroup()
+
+ds1 <- ds %>% 
+  dplyr::filter(fVN == "Baseline")
+
+source('../R/functions.r')
+source("../R/graphs.R")
+```
+
+Preliminary Results - Cross-sectional
+=====================================
+
+ACR
+---
+```{r acr boxplot}
+
+# Box plot of uVDBP in different albuminuria categories
+
+ds %>% 
+  filter(fVN == "Baseline") %>% 
+  select(acr_status, udbpCrRatio) %>%
+  na.omit() %>%
+  box_plot("acr_status", "log(udbpCrRatio)", 
+            "Albuminuria",
+            "log uVDBP:Creatinine")
+
+# Boxplot of ACR in uVDBP categories
+ds1 %>% 
+  select(UDBP_status, ACR) %>% 
+  na.omit() %>% 
+  box_plot("UDBP_status", "log(ACR)",
+           "Urinary VDBP status",
+           "log urine albumin-to-creatinine ratio (mg/mmol)")
+
+# Values
+table_value(ds1, by = "acr_status")
+
+# ANOVA
+
+anova <- aov(formula = log(udbpCrRatio)~acr_status, data = ds1)
+summary(anova)
+TukeyHSD(anova)
+rm(anova)
+```
+
+```{r acr scatterplot}
+
+# Scatterplot of ACR and uVDBP ----------------------------------
+
+ds %>% 
+  filter(fVN == "Baseline") %>% 
+  select(ACR, udbpCrRatio) %>% 
+  na.omit() %>% 
+  scatter_plot("log(ACR)", "log(udbpCrRatio)",
+               "log Albumin:Creatinine Ratio",
+               "log UDBP:Creatinine") +
+  geom_smooth(method = lm, colour = "grey50")
+
+# Spearman Correlation ------------------------------------------
+
+ds %>% 
+  filter(fVN == "Baseline") %>% 
+  cor.test(formula = ~ ACR + udbpCrRatio, data = ., method = "spearman")
+```
+
+
+eGFR
+----
+```{r eGFR boxplot}
+
+# Boxplot of uVDBP concentrations across eGFR categories --------------
+
+ds %>% 
+  filter(fVN == "Baseline") %>% 
+  select(eGFR_status, udbpCrRatio) %>% 
+  na.omit() %>% 
+  box_plot2("eGFR_status", "log(udbpCrRatio)", 
+            "Estimated GFR (ml/min/1.73m^2)",
+            "log uVDBP:Creatinine")
+
+# Values
+table_value(ds1, by = "eGFR_status")
+
+# ANOVA
+
+anova <- aov(formula = log(udbpCrRatio)~eGFR_status, data = ds1)
+summary(anova)
+TukeyHSD(anova)
+rm(anova)
+```
+
+```{r eGFR scatterplot}
+
+# Scatterplot of eGFR and uVDBP ----------------------------------
+
+ds %>% 
+  dplyr::filter(!(eGFR_status == "Moderate")) %>% 
+  dplyr::filter(eGFR < 150) %>% 
+  dplyr::select(eGFR, udbpCrRatio) %>% 
+  na.omit() %>% 
+  scatter_plot("eGFR", "log(udbpCrRatio)",
+               "Estimated Glomerular Filtration Rate (ml/min/1.73m^2)",
+               "log UDBP:Creatinine") +
+  ggplot2::geom_smooth(method = lm, colour = "grey50")
+
+# Spearman Correlation ------------------------------------------
+
+ds %>% 
+  filter(!(acr_status == "Macroalbuminuria")) %>% 
+  cor.test(formula = ~ eGFR + udbpCrRatio, data = ., method = "spearman")
+```
+
+```{r hyperfiltration}
+ds %>% 
+  dplyr::filter(eGFR < 45) %>% 
+  dplyr::select(SID, VN, Age, eGFR, dm_status, acr_status)
+
+ds %>% 
+  scatter_plot("Age", "eGFR",
+               "Age", "eGFR")
+```

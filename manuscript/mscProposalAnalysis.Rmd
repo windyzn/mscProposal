@@ -139,13 +139,3 @@ ds %>%
                "Age", "eGFR")
 ```
 
-
-UDBP Distribution
-=================
-```{r distribution}
-ds %>% 
-  dplyr::filter(VN == 6) %>% 
-  histo_plot("log(UDBP)", 0.05, 'log Urinary VDBP (ng/mL)')
-  # ggplot2::facet_grid(~fVN, switch = "x")
-```
-

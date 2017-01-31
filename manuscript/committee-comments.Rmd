@@ -1,0 +1,51 @@
+---
+title: "Committee Meeting Follow-ups"
+author: "Windy Wang"
+date: "January 31, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE)
+
+library(dplyr)
+
+ds <- readRDS(file='../data/ds.Rds') %>% 
+  dplyr::mutate(logUdbpRatio = log(udbpCrRatio)) %>% 
+  dplyr::select(SID, VN, fVN, Age, ACR, eGFR, UDBP,
+                acr_status, eGFR_status, UDBP_status, 
+                udbpCrRatio, logUdbpRatio)
+  # dplyr::group_by(SID) %>% 
+  # dplyr::filter(n() == 3) %>% 
+  # dplyr::ungroup()
+
+ds1 <- ds %>% 
+  dplyr::filter(fVN == "Baseline")
+
+source('../R/functions.r')
+source("../R/graphs.R")
+```
+
+UDBP Distribution
+=================
+```{r distribution}
+ds %>% 
+  dplyr::filter(VN == 6) %>% 
+  histo_plot("log(UDBP)", 0.05, 'log Urinary VDBP (ng/mL)')
+  # ggplot2::facet_grid(~fVN, switch = "x")
+```
+
+Age Associations
+================
+```{r age}
+ds %>% 
+  scatter_plot("Age", "log(ACR)",
+               "Age (Years)", " log Urine Albumin-to-Creatinine Ratio (mg/mmol)") +
+  ggplot2::geom_smooth(method = lm, colour = "grey50") +
+  ggplot2::facet_grid(~fVN, switch = "x")
+```
+```{r age-stats}
+ds %>% 
+  filter(fVN == "Baseline") %>% 
+  cor.test(formula = ~ Age + log(ACR), data = ., method = "spearman")
+```

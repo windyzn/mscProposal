@@ -2,7 +2,9 @@
 title: "Committee Meeting Follow-ups"
 author: "Windy Wang"
 date: "January 31, 2017"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -26,17 +28,19 @@ source('../R/functions.r')
 source("../R/graphs.R")
 ```
 
-UDBP Distribution
-=================
+
 ```{r distribution}
-ds %>% 
-  dplyr::filter(VN == 6) %>% 
-  histo_plot("log(UDBP)", 0.05, 'log Urinary VDBP (ng/mL)')
-  # ggplot2::facet_grid(~fVN, switch = "x")
+# UDBP Distribution
+# =================
+
+# ds %>% 
+#   dplyr::filter(VN == 6) %>% 
+#   histo_plot("log(UDBP)", 0.05, 'log Urinary VDBP (ng/mL)')
+#   # ggplot2::facet_grid(~fVN, switch = "x")
 ```
 
-Age Associations
-================
+### Age Associations
+
 ```{r age}
 ds %>% 
   scatter_plot("Age", "log(ACR)",
@@ -44,8 +48,23 @@ ds %>%
   ggplot2::geom_smooth(method = lm, colour = "grey50") +
   ggplot2::facet_grid(~fVN, switch = "x")
 ```
-```{r age-stats}
+
+At baseline, there is a significant positive association. 
+```{r age-stats1}
 ds %>% 
   filter(fVN == "Baseline") %>% 
+  cor.test(formula = ~ Age + log(ACR), data = ., method = "spearman")
+```
+
+At 3 year, there is a significant positive association
+```{r}
+ds %>% 
+  filter(fVN == "3Year") %>% 
+  cor.test(formula = ~ Age + log(ACR), data = ., method = "spearman")
+```
+At 6 year, there is significant positive association
+```{r}
+ds %>% 
+  filter(fVN == "6Year") %>% 
   cor.test(formula = ~ Age + log(ACR), data = ., method = "spearman")
 ```

@@ -14,10 +14,10 @@ ds <- readRDS(file='../data/ds.Rds') %>%
   dplyr::mutate(logUdbpRatio = log(udbpCrRatio)) %>% 
   dplyr::select(SID, VN, fVN, Age, ACR, eGFR, UDBP,
                 acr_status, eGFR_status, UDBP_status, 
-                udbpCrRatio, logUdbpRatio) %>% 
-  dplyr::group_by(SID) %>% 
-  dplyr::filter(n() == 3) %>% 
-  dplyr::ungroup()
+                udbpCrRatio, logUdbpRatio)
+  # dplyr::group_by(SID) %>% 
+  # dplyr::filter(n() == 3) %>% 
+  # dplyr::ungroup()
 
 ds1 <- ds %>% 
   dplyr::filter(fVN == "Baseline")
@@ -73,7 +73,7 @@ ds %>%
   scatter_plot("log(ACR)", "log(udbpCrRatio)",
                "log Albumin:Creatinine Ratio",
                "log UDBP:Creatinine") +
-  geom_smooth(method = lm, colour = "grey50")
+  ggplot2::geom_smooth(method = lm, colour = "grey50")
 
 # Spearman Correlation ------------------------------------------
 
@@ -93,7 +93,7 @@ ds %>%
   filter(fVN == "Baseline") %>% 
   select(eGFR_status, udbpCrRatio) %>% 
   na.omit() %>% 
-  box_plot2("eGFR_status", "log(udbpCrRatio)", 
+  box_plot("eGFR_status", "log(udbpCrRatio)", 
             "Estimated GFR (ml/min/1.73m^2)",
             "log uVDBP:Creatinine")
 
@@ -113,7 +113,7 @@ rm(anova)
 # Scatterplot of eGFR and uVDBP ----------------------------------
 
 ds %>% 
-  dplyr::filter(!(eGFR_status == "Moderate")) %>% 
+  dplyr::filter(fVN == "Baseline") %>% 
   dplyr::filter(eGFR < 150) %>% 
   dplyr::select(eGFR, udbpCrRatio) %>% 
   na.omit() %>% 
@@ -125,7 +125,7 @@ ds %>%
 # Spearman Correlation ------------------------------------------
 
 ds %>% 
-  filter(!(acr_status == "Macroalbuminuria")) %>% 
+  filter(fVN == "Baseline") %>% 
   cor.test(formula = ~ eGFR + udbpCrRatio, data = ., method = "spearman")
 ```
 
@@ -138,3 +138,14 @@ ds %>%
   scatter_plot("Age", "eGFR",
                "Age", "eGFR")
 ```
+
+
+UDBP Distribution
+=================
+```{r distribution}
+ds %>% 
+  dplyr::filter(VN == 6) %>% 
+  histo_plot("log(UDBP)", 0.05, 'log Urinary VDBP (ng/mL)')
+  # ggplot2::facet_grid(~fVN, switch = "x")
+```
+

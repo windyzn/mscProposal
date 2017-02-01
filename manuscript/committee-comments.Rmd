@@ -39,13 +39,12 @@ source("../R/graphs.R")
 #   # ggplot2::facet_grid(~fVN, switch = "x")
 ```
 
-### Age Associations
+### Age-ACR Associations
 
 ```{r age}
 ds %>% 
   scatter_plot("Age", "log(ACR)",
-               "Age (Years)", " log Urine Albumin-to-Creatinine Ratio (mg/mmol)") +
-  ggplot2::geom_smooth(method = lm, colour = "grey50") +
+               "Age (Years)", "log Urine Albumin-to-Creatinine Ratio (mg/mmol)") +
   ggplot2::facet_grid(~fVN, switch = "x")
 ```
 
@@ -67,4 +66,35 @@ At 6 year, there is significant positive association
 ds %>% 
   filter(fVN == "6Year") %>% 
   cor.test(formula = ~ Age + log(ACR), data = ., method = "spearman")
+```
+
+### Age-eGFR Associations
+
+```{r age}
+ds %>% 
+  scatter_plot("Age", 
+               "eGFR",
+               "Age (Years)", 
+               "Estimated Glomerular Filtration Rate (ml/min/1.73m^2)") +
+  ggplot2::facet_grid(~fVN, switch = "x")
+```
+
+At baseline, there is a significant positive association.
+```{r age-stats1}
+ds %>% 
+  filter(fVN == "Baseline") %>% 
+  cor.test(formula = ~ Age + eGFR, data = ., method = "pearson")
+```
+
+At 3 year, there is a significant positive association
+```{r}
+ds %>% 
+  filter(fVN == "3Year") %>% 
+  cor.test(formula = ~ Age + eGFR, data = ., method = "pearson")
+```
+At 6 year, there is significant positive association
+```{r}
+ds %>% 
+  filter(fVN == "6Year") %>% 
+  cor.test(formula = ~ Age + eGFR, data = ., method = "pearson")
 ```

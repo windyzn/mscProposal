@@ -24,7 +24,7 @@ box_plot <- function(data, xvar, yvar, xlab="", ylab="") {
 
 # Scatterplot -------------------------------------------
 
-scatter_plot = function(data, xvar, yvar, xlab='', ylab='', line = TRUE) {
+scatter_plot = function(data, xvar, yvar, xlab='', ylab='', line = TRUE, facet = FALSE) {
   myplot <- ggplot2::ggplot(data, ggplot2::aes_string(x=xvar, y=yvar)) +
     ggplot2::geom_point(colour = "#0db7c4", size = 1) + #mapping=aes(color=mcr_status)
     ggplot2::theme_minimal() + 
@@ -36,9 +36,16 @@ scatter_plot = function(data, xvar, yvar, xlab='', ylab='', line = TRUE) {
                    axis.title = ggplot2::element_text(size = 10)) +
     ggplot2::xlab(xlab) +
     ggplot2::ylab(ylab)
-  if(line == TRUE) {
+  if(line == TRUE & facet == FALSE) {
     myplot +
       ggplot2::geom_smooth(method = lm, colour = "grey50")
+  } else if(line == TRUE & facet == TRUE) {
+    myplot +
+      ggplot2::geom_smooth(method = lm, colour = "grey50") +
+      ggplot2::facet_grid(~fVN, switch = "x")
+  } else if(line == FALSE & facet == TRUE) {
+    myplot +
+      ggplot2::facet_grid(~fVN, switch = "x")
   } else {
     myplot
   }

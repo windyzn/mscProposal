@@ -28,73 +28,80 @@ source('../R/functions.r')
 source("../R/graphs.R")
 ```
 
+### UDBP Distribution
+
+Distribution of urinary VDBP (not log adjusted)
 
 ```{r distribution}
-# UDBP Distribution
-# =================
-
-# ds %>% 
-#   dplyr::filter(VN == 6) %>% 
-#   histo_plot("log(UDBP)", 0.05, 'log Urinary VDBP (ng/mL)')
-#   # ggplot2::facet_grid(~fVN, switch = "x")
-```
-
-### Age-ACR Associations
-
-```{r age-ACR}
 ds %>%
-  scatter_plot("Age", "log(ACR)",
-               "Age (Years)", "log Urine Albumin-to-Creatinine Ratio (mg/mmol)",
-               facet = TRUE)
+  histo_plot("UDBP", 20, 'Urinary VDBP (ng/mL)',
+             facet = TRUE)
 ```
 
-At baseline, there is a significant positive association. 
-```{r age-ACR-stats1}
-ds %>% 
-  filter(fVN == "Baseline") %>% 
-  cor.test(formula = ~ Age + log(ACR), data = ., method = "spearman")
+Distribution of urinary VDBP (adjusted using natural log)
+ 
+```{r log distribution}
+ds %>%
+  histo_plot("log(UDBP)", .2, 'log Urinary VDBP (ng/mL)',
+             facet = TRUE)
 ```
 
-At 3 year, there is a significant positive association
-```{r age-ACR-stats2}
-ds %>% 
-  filter(fVN == "3Year") %>% 
-  cor.test(formula = ~ Age + log(ACR), data = ., method = "spearman")
-```
-At 6 year, there is significant positive association
-```{r age-ACR-stats6}
-ds %>% 
-  filter(fVN == "6Year") %>% 
-  cor.test(formula = ~ Age + log(ACR), data = ., method = "spearman")
-```
+<!-- ### Age-ACR Associations -->
 
-### Age-eGFR Associations
+<!-- ```{r age-ACR} -->
+<!-- ds %>% -->
+<!--   scatter_plot("Age", "log(ACR)", -->
+<!--                "Age (Years)", "log Urine Albumin-to-Creatinine Ratio (mg/mmol)", -->
+<!--                facet = TRUE) -->
+<!-- ``` -->
 
-```{r age-eGFR}
-ds %>% 
-  scatter_plot("Age", 
-               "eGFR",
-               "Age (Years)", 
-               "Estimated Glomerular Filtration Rate (ml/min/1.73m^2)",
-               facet = TRUE)
-```
+<!-- At baseline, there is a significant positive association.  -->
+<!-- ```{r age-ACR-stats1} -->
+<!-- ds %>%  -->
+<!--   filter(fVN == "Baseline") %>%  -->
+<!--   cor.test(formula = ~ Age + log(ACR), data = ., method = "spearman") -->
+<!-- ``` -->
 
-At baseline, there is a significant positive association.
-```{r age-eGFR-stats1}
-ds %>% 
-  filter(fVN == "Baseline") %>% 
-  cor.test(formula = ~ Age + eGFR, data = ., method = "pearson")
-```
+<!-- At 3 year, there is a significant positive association -->
+<!-- ```{r age-ACR-stats2} -->
+<!-- ds %>%  -->
+<!--   filter(fVN == "3Year") %>%  -->
+<!--   cor.test(formula = ~ Age + log(ACR), data = ., method = "spearman") -->
+<!-- ``` -->
+<!-- At 6 year, there is significant positive association -->
+<!-- ```{r age-ACR-stats6} -->
+<!-- ds %>%  -->
+<!--   filter(fVN == "6Year") %>%  -->
+<!--   cor.test(formula = ~ Age + log(ACR), data = ., method = "spearman") -->
+<!-- ``` -->
 
-At 3 year, there is a significant positive association
-```{r age-eGFR-stats3}
-ds %>% 
-  filter(fVN == "3Year") %>% 
-  cor.test(formula = ~ Age + eGFR, data = ., method = "pearson")
-```
-At 6 year, there is significant positive association
-```{r age-eGFR-stats6}
-ds %>% 
-  filter(fVN == "6Year") %>% 
-  cor.test(formula = ~ Age + eGFR, data = ., method = "pearson")
-```
+<!-- ### Age-eGFR Associations -->
+
+<!-- ```{r age-eGFR} -->
+<!-- ds %>%  -->
+<!--   scatter_plot("Age",  -->
+<!--                "eGFR", -->
+<!--                "Age (Years)",  -->
+<!--                "Estimated Glomerular Filtration Rate (ml/min/1.73m^2)", -->
+<!--                facet = TRUE) -->
+<!-- ``` -->
+
+<!-- At baseline, there is a significant positive association. -->
+<!-- ```{r age-eGFR-stats1} -->
+<!-- ds %>%  -->
+<!--   filter(fVN == "Baseline") %>%  -->
+<!--   cor.test(formula = ~ Age + eGFR, data = ., method = "pearson") -->
+<!-- ``` -->
+
+<!-- At 3 year, there is a significant positive association -->
+<!-- ```{r age-eGFR-stats3} -->
+<!-- ds %>%  -->
+<!--   filter(fVN == "3Year") %>%  -->
+<!--   cor.test(formula = ~ Age + eGFR, data = ., method = "pearson") -->
+<!-- ``` -->
+<!-- At 6 year, there is significant positive association -->
+<!-- ```{r age-eGFR-stats6} -->
+<!-- ds %>%  -->
+<!--   filter(fVN == "6Year") %>%  -->
+<!--   cor.test(formula = ~ Age + eGFR, data = ., method = "pearson") -->
+<!-- ``` -->

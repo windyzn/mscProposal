@@ -3,21 +3,7 @@
 #######################################################################################
 install.packages(c("tidyverse", "neprho"))
 
-library(nephro)
-library(carpenter)
-library(ggplot2)
-library(knitr)
-library(plyr)
 library(dplyr)
-library(tidyr)
-library(pander)
-library(captioner)
-library(knitr)
-library(mason)
-library(msm)
-library(magrittr)
-library(geepack)
-
 
 # No need to run unless data has changed
 
@@ -149,7 +135,7 @@ ds <- PROMISE::PROMISE %>%
     Canoe,
     dplyr::matches("meds")
   )
-
+ß
 
 # Save the data ===================================================================================
 

@@ -46,62 +46,80 @@ ds %>%
              facet = TRUE)
 ```
 
-<!-- ### Age-ACR Associations -->
+### Age-ACR Associations
 
-<!-- ```{r age-ACR} -->
-<!-- ds %>% -->
-<!--   scatter_plot("Age", "log(ACR)", -->
-<!--                "Age (Years)", "log Urine Albumin-to-Creatinine Ratio (mg/mmol)", -->
-<!--                facet = TRUE) -->
-<!-- ``` -->
+```{r age-ACR}
+ds %>%
+  scatter_plot("Age", "log(ACR)",
+               "Age (Years)", "log Urine Albumin-to-Creatinine Ratio (mg/mmol)",
+               facet = TRUE)
+```
 
-<!-- At baseline, there is a significant positive association.  -->
-<!-- ```{r age-ACR-stats1} -->
-<!-- ds %>%  -->
-<!--   filter(fVN == "Baseline") %>%  -->
-<!--   cor.test(formula = ~ Age + log(ACR), data = ., method = "spearman") -->
-<!-- ``` -->
+At baseline, there is a significant positive association.
+```{r age-ACR-stats1}
+ds %>%
+  filter(fVN == "Baseline") %>%
+  cor.test(formula = ~ Age + log(ACR), data = ., method = "spearman")
+```
 
-<!-- At 3 year, there is a significant positive association -->
-<!-- ```{r age-ACR-stats2} -->
-<!-- ds %>%  -->
-<!--   filter(fVN == "3Year") %>%  -->
-<!--   cor.test(formula = ~ Age + log(ACR), data = ., method = "spearman") -->
-<!-- ``` -->
-<!-- At 6 year, there is significant positive association -->
-<!-- ```{r age-ACR-stats6} -->
-<!-- ds %>%  -->
-<!--   filter(fVN == "6Year") %>%  -->
-<!--   cor.test(formula = ~ Age + log(ACR), data = ., method = "spearman") -->
-<!-- ``` -->
+At 3 year, there is a significant positive association
+```{r age-ACR-stats2}
+ds %>%
+  filter(fVN == "3Year") %>%
+  cor.test(formula = ~ Age + log(ACR), data = ., method = "spearman")
+```
+At 6 year, there is significant positive association
+```{r age-ACR-stats6}
+ds %>%
+  filter(fVN == "6Year") %>%
+  cor.test(formula = ~ Age + log(ACR), data = ., method = "spearman")
+```
 
-<!-- ### Age-eGFR Associations -->
+### Age-eGFR Associations
 
-<!-- ```{r age-eGFR} -->
-<!-- ds %>%  -->
-<!--   scatter_plot("Age",  -->
-<!--                "eGFR", -->
-<!--                "Age (Years)",  -->
-<!--                "Estimated Glomerular Filtration Rate (ml/min/1.73m^2)", -->
-<!--                facet = TRUE) -->
-<!-- ``` -->
+```{r age-eGFR}
+ds %>%
+  scatter_plot("Age",
+               "eGFR",
+               "Age (Years)",
+               "Estimated Glomerular Filtration Rate (ml/min/1.73m^2)",
+               facet = TRUE)
+```
 
-<!-- At baseline, there is a significant positive association. -->
-<!-- ```{r age-eGFR-stats1} -->
-<!-- ds %>%  -->
-<!--   filter(fVN == "Baseline") %>%  -->
-<!--   cor.test(formula = ~ Age + eGFR, data = ., method = "pearson") -->
-<!-- ``` -->
+At baseline, there is a significant positive association.
+```{r age-eGFR-stats1}
+ds %>%
+  filter(fVN == "Baseline") %>%
+  cor.test(formula = ~ Age + eGFR, data = ., method = "pearson")
+```
 
-<!-- At 3 year, there is a significant positive association -->
-<!-- ```{r age-eGFR-stats3} -->
-<!-- ds %>%  -->
-<!--   filter(fVN == "3Year") %>%  -->
-<!--   cor.test(formula = ~ Age + eGFR, data = ., method = "pearson") -->
-<!-- ``` -->
-<!-- At 6 year, there is significant positive association -->
-<!-- ```{r age-eGFR-stats6} -->
-<!-- ds %>%  -->
-<!--   filter(fVN == "6Year") %>%  -->
-<!--   cor.test(formula = ~ Age + eGFR, data = ., method = "pearson") -->
-<!-- ``` -->
+At 3 year, there is a significant positive association
+```{r age-eGFR-stats3}
+ds %>%
+  filter(fVN == "3Year") %>%
+  cor.test(formula = ~ Age + eGFR, data = ., method = "pearson")
+```
+At 6 year, there is significant positive association
+```{r age-eGFR-stats6}
+ds %>%
+  filter(fVN == "6Year") %>%
+  cor.test(formula = ~ Age + eGFR, data = ., method = "pearson")
+```
+
+### UDBP Progression
+```{r}
+ds %>% 
+  dplyr::mutate(
+    UDBP1 = ifelse(VN == 1, UDBP, NA),
+    UDBP3 = ifelse(VN == 3, UDBP, NA),
+    UDBP6 = ifelse(VN == 6, UDBP, NA)) %>% 
+  dplyr::filter(UDBP > 200) %>%
+  line_plot("fVN", "UDBP", "SID",
+            "Visit Number", "UDBP")
+```
+```{r}
+ds %>% 
+  box_plot("fVN", "logUdbpRatio",
+           "Visit Number", "UDBP")
+```
+

@@ -72,3 +72,35 @@ histo_plot = function(data, variable, bin, xlab='', facet = FALSE) {
     histoplot
   }
 }
+
+
+#' Line Plot
+#'
+#' @param data Dataset (cleaned) 
+#' @param xvar Variable on x axis (continous or factor)
+#' @param yvar Variable on y axis (continuous or factor)
+#' @param xlab Axis label for x axis
+#' @param ylab Axis label for y axis
+#'
+#' @return Plot
+#'
+#' @examples
+#' ds %>% 
+#'   dplyr::filter(SID < 1050 ) %>% 
+#'   line_plot("fVN", "UDBP", "SID", "Visit Number", "UDBP")
+line_plot = function(data, xvar, yvar, byvar, xlab='', ylab='') {
+  ggplot2::ggplot(data, ggplot2::aes_string(x = xvar, y = yvar, 
+                                            group = byvar, colour = byvar)) +
+    ggplot2::geom_line() +
+    ggplot2::geom_point() +
+    ggplot2::theme_minimal() +
+    ggplot2::theme(legend.position = "none",
+                   panel.grid.major.x = ggplot2::element_blank(), 
+                   axis.line.y = ggplot2::element_blank(),
+                   axis.text.y = ggplot2::element_text(colour = "grey"),
+                   axis.ticks.y = ggplot2::element_line(colour = "grey"),
+                   axis.text.x = ggplot2::element_text(colour = "grey 30"), #angle = 45
+                   axis.title = ggplot2::element_text(size = 10)) +
+    ggplot2::xlab(xlab) +
+    ggplot2::ylab(ylab)
+}

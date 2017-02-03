@@ -1,8 +1,8 @@
 
 # Boxplot -------------------------------
 
-box_plot <- function(data, xvar, yvar, xlab="", ylab="") {
-  ggplot2::ggplot(data, ggplot2::aes_string(x = xvar, y = yvar)) +
+box_plot <- function(data, xvar, yvar, xlab="", ylab="", facet = FALSE) {
+  myboxplot <- ggplot2::ggplot(data, ggplot2::aes_string(x = xvar, y = yvar)) +
     ggplot2::geom_jitter(ggplot2::aes_string(colour = xvar, alpha = 0.4), width = 0.33) +
     ggplot2::geom_boxplot(ggplot2::aes_string(colour = xvar, fill = xvar), 
                           outlier.shape = NA) +
@@ -20,6 +20,12 @@ box_plot <- function(data, xvar, yvar, xlab="", ylab="") {
                    axis.title = ggplot2::element_text(size = 10)) +
     ggplot2::xlab(xlab) +
     ggplot2::ylab(ylab)
+  if(facet == TRUE) {
+    myboxplot +
+      ggplot2::facet_grid(~fVN, switch = "x")
+  } else {
+    myboxplot
+  }
 }
 
 # Scatterplot -------------------------------------------

@@ -1,6 +1,15 @@
-
-# Boxplot -------------------------------
-
+#' Boxplot --------------------------------------------------------------------
+#'
+#' @param data Cleaned data 
+#' @param xvar Variable on x-axis
+#' @param yvar Variable on y-axis
+#' @param xlab x-axis label
+#' @param ylab y-axis label
+#' @param facet Split the plot by visit number
+#'
+#' @return Plot
+#'
+#' @examples
 box_plot <- function(data, xvar, yvar, xlab="", ylab="", facet = FALSE) {
   myboxplot <- ggplot2::ggplot(data, ggplot2::aes_string(x = xvar, y = yvar)) +
     ggplot2::geom_jitter(ggplot2::aes_string(colour = xvar, alpha = 0.4), width = 0.33) +
@@ -28,8 +37,20 @@ box_plot <- function(data, xvar, yvar, xlab="", ylab="", facet = FALSE) {
   }
 }
 
-# Scatterplot -------------------------------------------
 
+#' Scatterplot ----------------------------------------------------------------
+#'
+#' @param data Clearned data
+#' @param xvar Variable on x-axis
+#' @param yvar Variable on y-axis
+#' @param xlab x-axis label
+#' @param ylab y-axis label
+#' @param line Line of best fit
+#' @param facet Split the plot by visit number
+#'
+#' @return Plot
+#'
+#' @examples
 scatter_plot = function(data, xvar, yvar, xlab='', ylab='', line = TRUE, facet = FALSE) {
   myplot <- ggplot2::ggplot(data, ggplot2::aes_string(x=xvar, y=yvar)) +
     ggplot2::geom_point(colour = "#0db7c4", size = 1) + #mapping=aes(color=mcr_status)
@@ -57,8 +78,18 @@ scatter_plot = function(data, xvar, yvar, xlab='', ylab='', line = TRUE, facet =
   }
 }
 
-# Histogram -----------------------------------------------
 
+#' Histogram --------------------------------------------------------
+#'
+#' @param data Cleaned data
+#' @param variable Variable of interest
+#' @param bin Width of bars
+#' @param xlab x-axis label
+#' @param facet Separate the graph by visit number
+#'
+#' @return Plot
+#'
+#' @examples
 histo_plot = function(data, variable, bin, xlab='', facet = FALSE) {
   histoplot <- ggplot2::ggplot(data, ggplot2::aes_string(x=variable)) +
     ggplot2::geom_histogram(binwidth=bin,
@@ -80,7 +111,7 @@ histo_plot = function(data, variable, bin, xlab='', facet = FALSE) {
 }
 
 
-#' Line Plot
+#' Line Plot ---------------------------------------------------------------
 #'
 #' @param data Dataset (cleaned) 
 #' @param xvar Variable on x axis (continous or factor)

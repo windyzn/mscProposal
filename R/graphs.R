@@ -12,12 +12,8 @@
 #' @examples
 box_plot <- function(data, xvar, yvar, xlab="", ylab="", facet = FALSE) {
   myboxplot <- ggplot2::ggplot(data, ggplot2::aes_string(x = xvar, y = yvar)) +
-<<<<<<< HEAD
-    ggplot2::geom_boxplot(ggplot2::aes_string(colour = xvar, fill = xvar), 
-=======
     ggplot2::geom_jitter(ggplot2::aes_string(colour = xvar), width = 0.33) +
     ggplot2::geom_boxplot(ggplot2::aes_string(colour = xvar, fill = xvar, alpha = 0.6), 
->>>>>>> 9cc885bac81e3d08a14f22d44b36b94dc5d9fa1e
                           outlier.shape = NA) +
     ggplot2::stat_summary(geom = "crossbar", width = 0.65, fatten = 0, color = "white",
                           fun.data = function(x){
